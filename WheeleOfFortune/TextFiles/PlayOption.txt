@@ -1,0 +1,4 @@
+Select option:
+1) Select letter.
+2) Guess password.
+3) Quit to menu.
