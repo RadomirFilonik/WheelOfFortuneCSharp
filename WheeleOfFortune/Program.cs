@@ -29,15 +29,9 @@ namespace WheeleOfFortune
 
         static void Main(string[] args)
         {
-            _puzzleRepository.Add(_puzzleFactory.CreatePuzzle("Lorem", "TRE QUAECQUIDIA BLACHINFLO DEXSPEPERSPIDIAE BRU SAEQUO"));
-            _puzzleRepository.Add(_puzzleFactory.CreatePuzzle("Ipsum", "LAIMOVEO RA DIASTRA"));
-            _puzzleRepository.Add(_puzzleFactory.CreatePuzzle("Dolor", "SAULCICIECO QUADO NE STRE CLAU"));
-            _puzzleRepository.Add(_puzzleFactory.CreatePuzzle("Adipisci", "SYLLADIO BU MYRTUGEO SCU BEA"));
-            _puzzleRepository.Add(_puzzleFactory.CreatePuzzle("Consectetur", "EI PLA PLACTO RERSO LAI GLA"));
-            _puzzleRepository.Add(_puzzleFactory.CreatePuzzle("Quisquam", "PRIO TRA RAUNA TYRA LECCLELIO"));
-
             try
             {
+                LoadPuzzlesFromTextFile();
                 ConsoleKeyInfo optionMainMenuKey;
                 do
                 {
@@ -65,10 +59,12 @@ namespace WheeleOfFortune
             }
             catch(Exception ex)
             {
-                Console.WriteLine($"There was an error: {ex.Message}");
-
+                Console.WriteLine($"{ex.Message}");
+                Console.ReadKey();
             }
         }
+
+        
 
         private static void PlayGame()
         {
@@ -214,6 +210,34 @@ namespace WheeleOfFortune
             Console.WriteLine($"Category : {_randomCategory}.");
             Console.WriteLine(_secretPassword);
             Console.WriteLine();
+        }
+
+        private static void LoadPuzzlesFromTextFile()
+        {
+            try
+            {
+                string[] puzzlesFromTextFile = File.ReadAllLines("TextFiles/Puzzles.txt");
+                var puzzlesInMemory = puzzlesFromTextFile.Select(x =>
+                {
+                    string[] splitted = x.Split(',');
+                    return new Puzzle
+                    {
+                        Category = splitted[0].ToUpper().Trim(),
+                        Password = splitted[1].ToUpper().Trim()
+                    };
+                }).ToList();
+
+                foreach (var puzzle in puzzlesInMemory)
+                {
+                    _puzzleRepository.Add(puzzle);
+                }
+            }
+            catch(FileNotFoundException)
+            {
+                Console.WriteLine("There is no Puzzles File");
+                Console.WriteLine("Create you owne puzzles");
+                Console.ReadKey();
+            }
         }
     }
 }
