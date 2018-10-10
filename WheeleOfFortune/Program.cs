@@ -189,7 +189,7 @@ namespace WheeleOfFortune
             }
             else
             {
-                Console.WriteLine();
+                Console.WriteLine("Sorry. This is incorrect password.");
                 Console.ReadKey();
                 return true;
             }
